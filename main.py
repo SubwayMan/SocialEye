@@ -32,7 +32,7 @@ def generate_frames():
 
 @app.route('/video')
 def video():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame') #
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame') 
 
 # get the info from the video from pi and save it
 

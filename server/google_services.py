@@ -2,7 +2,7 @@ from google.cloud import storage
 import sys
 
 
-def upload_blob(source_file_name, destination_blob_name):
+def upload_blob(video_file, destination_blob_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
     # bucket_name = "your-bucket-name"
@@ -23,11 +23,7 @@ def upload_blob(source_file_name, destination_blob_name):
     # generation-match precondition using its generation number.
     generation_match_precondition = 0
 
-    blob.upload_from_filename(source_file_name, if_generation_match=generation_match_precondition)
-
-    print(
-        f"File {source_file_name} uploaded to {destination_blob_name}."
-    )
+    blob.upload_from_file(video_file, if_generation_match=generation_match_precondition)
 
 if __name__ == "__main__":
     upload_blob(*sys.argv[1:])
