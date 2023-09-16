@@ -2,7 +2,7 @@ from google.cloud import storage
 import sys
 
 
-def upload_blob(video_file, destination_blob_name):
+def upload_blob(video_file, video_name, destination_blob_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
     # bucket_name = "your-bucket-name"
@@ -24,6 +24,9 @@ def upload_blob(video_file, destination_blob_name):
     generation_match_precondition = 0
 
     blob.upload_from_file(video_file, if_generation_match=generation_match_precondition)
+  
+    return f"https://storage.googleapis.com/dss-bucket/videos/{video_name}"
+  
 
 if __name__ == "__main__":
     upload_blob(*sys.argv[1:])
