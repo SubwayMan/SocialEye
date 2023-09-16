@@ -1,9 +1,28 @@
-### Python installation instructions
-If no `/venv folder exists in repository root, run
-```python -m venv venv/```
-To enter virtual environment, run
-```source ./venv/bin/activate```
-If python dependencies have updated, run
-```pip install -r requirements.txt```
+# Security Discord Bot
 
+## Table of Contents
+
+- [Inspiration](#inspiration)
+- [What it Does](#what-it-does)
+- [How We Built It](#how-we-built-it)
+- [Challenges We Ran Into](#challenges-we-ran-into)
+- [Accomplishments We're Proud Of](#accomplishments-were-proud-of)
+- [What We Learned](#what-we-learned)
+- [What's Next for Terra Taskers](#whats-next-for-terra-taskers)
+
+## Inspiration
+
+## What It Does
+
+## How We Built It
+
+## Challenges We Ran Into
+
+## Accomplishments We're Proud Of
+
+## What We Learned
+
+## What's Next
+
+**Secure & Calm**
 
