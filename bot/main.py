@@ -10,6 +10,6 @@ bot = discord.Bot(intents=intents)
 
 @bot.command()
 async def test(ctx):
-  await ctx.respond("hello")
+  await ctx.respond("https://storage.googleapis.com/dss-bucket/videos/Garfield%20Dancing%20to%20Happy.mp4")
 
 bot.run(token)
