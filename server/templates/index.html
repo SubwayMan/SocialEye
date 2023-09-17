@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Discord Security System</title>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  
+  <body>
+    <div>
+        <h1 style="color:white;margin-top:100px">Discord Security System</h1>
+    </div>
+    <div style="display:flex; justify-content:center; align-items:center;margin-top:10px">
+     <video controls style="width:650px;height:450px">
+           <source src="https://storage.googleapis.com/dss-bucket/videos/{{ video_arg }}" type="video/mp4">
+      </video>
+    </div>
+  
+    <div style="color:white; font-size:30px; justify-content:center; display:flex;margin-top:150px">
+        <a href="https://github.com/SubwayMan/discord-security-system" target="_blank" rel="noopener noreferrer"><ion-icon name="logo-github" style="color:white"></ion-icon>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js">   
+  </script>
+  </body>
+</html>

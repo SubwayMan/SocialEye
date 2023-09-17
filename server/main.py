@@ -14,14 +14,15 @@ os.environ.setdefault("GCLOUD_PROJECT", "linen-server-399214")
 if "dss-videos" not in os.listdir("/tmp"):
   os.mkdir("/tmp/dss-videos")
 
-
 @app.route("/")
 def index():
   return render_template('index.html')
 
-@app.get('/video/<video_arg>')
-def single_converter(video_arg):
-    return "here is the + str(video_arg)"
+@app.route('/video/<video_arg>')
+def arguments_video(video_arg):
+    return render_template('index.html', video_arg=video_arg)
+
+   # return f"Here is the argument: {video_arg}"
 
 @app.route("/video-index", methods=["GET"])
 def video_index():
@@ -42,7 +43,8 @@ def video_upload():
   video = request.files["video"]
   
   assert video.filename, "No selected file"
-  video_name = video.filename.split(".")[0]
+
+  video_name = video_nameideo.filename.split(".")[0]
 
   print(request.text)
 
