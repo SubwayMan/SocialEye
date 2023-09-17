@@ -12,6 +12,8 @@ import time
 import re
 import asyncio
 import websockets
+import sys
+
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -24,7 +26,7 @@ if "dss-videos" not in os.listdir("/tmp"):
 
 @app.route("/")
 def index():
-  return render_template('index.html')
+  return render_template('index.html', video_arg="video1694938174.mp4")
 
 @app.route("/stream")
 def stream():
@@ -110,5 +112,5 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     server = loop.create_server(websockets.serve(video_stream, '0.0.0.0/video_stream', 8080), host='0.0.0.0', port=8080)
     asyncio.ensure_future(server)
-    socketio.run(app, host='0.0.0.0', port=8080)
+    socketio.run(app, host='0.0.0.0', port=8080, allow_unsafe_werkzeug=True)
 

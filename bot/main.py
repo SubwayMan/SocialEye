@@ -5,6 +5,7 @@ from discord.ext import commands
 import requests
 import random
 import re
+import sys
 
 # initialize bot
 token = os.environ["BOT_TOKEN"]
@@ -12,6 +13,10 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = discord.Bot(intents=intents)
 
+if "--prod" in sys.argv:
+    HOME_URL = "https://discord-security-system-subwayman.replit.app"
+else:
+    HOME_URL = "https://discord-security-system.subwayman.repl.co"
 class Viewer(discord.ui.View):
     def __init__(self, bot, elements):
         super().__init__()
@@ -51,14 +56,14 @@ class Viewer(discord.ui.View):
 
 
 def get_urls():
-    url = "https://discord-security-system.subwayman.repl.co/video-index"
+    url = HOME_URL+"/video-index"
     req = requests.get(url)
     items = req.json()["items"]
     urls = []
     for item in items:
         if item.endswith(".mp4"):
             item = item.split("/")[-1]
-            urls.append(f"https://discord-security-system.subwayman.repl.co/video/{item}")
+            urls.append(HOME_URL+f"/video/{item}")
             
     urls.sort()
     urls = urls[:15]
@@ -69,7 +74,7 @@ def get_urls():
     
 @bot.command()
 async def test(ctx):
-    await ctx.respond("https://storage.googleapis.com/dss-bucket/videos/Garfield%20Dancing%20to%20Happy.mp4")
+    await ctx.respond("https://www.youtube.com/watch?v=k9IDvub7yoQ")
 
 
 @bot.command()
