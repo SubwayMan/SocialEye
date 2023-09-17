@@ -33,7 +33,7 @@ def upload_blob(video_file, video_name, destination_blob_name):
 def get_blobs():
   storage_client = storage.Client()
   bucket = storage_client.bucket("dss-bucket")
-  blobs = bucket.list_blobs(max_results=10)
+  blobs = bucket.list_blobs(max_results=100)
   for blob in blobs:
     yield blob.name
 

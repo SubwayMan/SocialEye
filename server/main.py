@@ -2,14 +2,22 @@ from flask import Flask
 from flask import render_template
 from flask import jsonify
 from flask import request
+from flask_socketio import SocketIO, emit
+import base64
 from google_services import upload_blob, get_blobs
 import sqlite3
 import os
 import subprocess
 import time
 import re
+import asyncio
+import websockets
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+connected_clients = set()
+
 os.environ.setdefault("GCLOUD_PROJECT", "linen-server-399214")
 if "dss-videos" not in os.listdir("/tmp"):
   os.mkdir("/tmp/dss-videos")
@@ -17,6 +25,10 @@ if "dss-videos" not in os.listdir("/tmp"):
 @app.route("/")
 def index():
   return render_template('index.html')
+
+@app.route("/stream")
+def stream():
+  return render_template('stream.html')
 
 @app.route('/video/<video_arg>')
 def arguments_video(video_arg):
@@ -44,9 +56,7 @@ def video_upload():
   
   assert video.filename, "No selected file"
 
-  video_name = video_nameideo.filename.split(".")[0]
-
-  print(request.text)
+  video_name = video.filename.split(".")[0]
 
 
   video_path = f"/tmp/dss-videos/{video.filename}"
@@ -75,4 +85,30 @@ def video_upload():
   
   return "File upload successful", 200
   
-app.run(host='0.0.0.0',port=8080)
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+async def video_stream(websocket, path):
+    connected_clients.add(websocket)
+    try:
+        while True:
+            frame_data = await websocket.recv()
+            if frame_data == "stream_start":
+                continue
+
+            # Broadcast the frame to all connected clients
+            for client in connected_clients:
+                try:
+                    await client.send(frame_data)
+                except websockets.ConnectionClosed:
+                    connected_clients.remove(client)
+    except websockets.ConnectionClosed:
+        connected_clients.remove(websocket)
+
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    server = loop.create_server(websockets.serve(video_stream, '0.0.0.0/video_stream', 8080), host='0.0.0.0', port=8080)
+    asyncio.ensure_future(server)
+    socketio.run(app, host='0.0.0.0', port=8080)
+

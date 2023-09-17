@@ -24,27 +24,30 @@ class Viewer(discord.ui.View):
         self.elements = elements
         self.add_item(self.left_button)
         self.add_item(self.right_button)
+        self.right_button.disabled = True
         
     async def on_timeout(self):
         await self.message.edit(view=None)
         
     async def left_callback(self, interaction):
+        self.right_button.disabled = False
         self.current_page -= 1
         if self.current_page == 0:
             self.left_button.disabled = True
         else:
             self.left_button.disabled = False
             
-        await interaction.response.edit_message(embed=self.elements[self.current_page], view=self)
+        await interaction.response.edit_message(content=self.elements[self.current_page], view=self)
         
     async def right_callback(self, interaction):
         self.current_page += 1
+        self.left_button.disabled = False
         if self.current_page == len(self.elements)-1:
             self.right_button.disabled = True
         else:
             self.right_button.disabled = False
             
-        await interaction.response.edit_message(embed=self.elements[self.current_page], view=self)
+        await interaction.response.edit_message(content=self.elements[self.current_page], view=self)
 
 
 def get_urls():
@@ -54,9 +57,11 @@ def get_urls():
     urls = []
     for item in items:
         if item.endswith(".mp4"):
-            urls.append(f"https://storage.googleapis.com/dss-bucket/{item}")
+            item = item.split("/")[-1]
+            urls.append(f"https://discord-security-system.subwayman.repl.co/video/{item}")
             
     urls.sort()
+    urls = urls[:15]
     timestamps = []
     for url in urls:
         timestamps.append(int(re.search(r"\d+", url).group(0)))
@@ -71,17 +76,8 @@ async def test(ctx):
 async def viewer(ctx):
 
     urls, timestamps = get_urls()
-    embeds = []
-  
-    for i in range(len(urls)):
-        converted_time = datetime.fromtimestamp(timestamps[i]).strftime("%Y-%m-%d %H:%M:%S")
-        embed = discord.Embed(title=f"Viewer", description=f"See past captures." , color=0xffff00)
-      
-        embed.add_field(name=f"{converted_time}", value=urls[i])
-        embed.set_footer(text="All times in UTC.")
-        embeds.append(embed)
-      
-    await ctx.respond(" ", embed=embeds[-1], view=Viewer(bot, embeds))
+    embeds = []  
+    await ctx.respond(content=urls[-1], view=Viewer(bot, urls))
 
 @bot.command()
 async def dingus(ctx):

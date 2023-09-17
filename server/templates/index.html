@@ -2,6 +2,13 @@
 <html lang="en">
   <head>
       <meta charset="UTF-8">
+      <meta content="Security Camera" property="og:title">
+      <meta property="og:type" content="video">
+      <meta property="og:image" content="https://media.discordapp.net/attachments/1152595392882540566/1152828232819802162/camera.jpg?width=1696&height=1130">
+      <meta property="og:description" content="Security camera footage.">
+      <meta property="og:url" content="https://storage.googleapis.com/dss-bucket/videos/{{ video_arg }}"">
+      <meta property="og:video" content="https://storage.googleapis.com/dss-bucket/videos/{{ video_arg }}"">
+      <meta property="og:video:type" content="video">
       <title>Discord Security System</title>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
       <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -11,8 +18,8 @@
     <div>
         <h1 style="color:white;margin-top:100px">Discord Security System</h1>
     </div>
-    <div style="display:flex; justify-content:center; align-items:center;margin-top:10px">
-     <video controls style="width:650px;height:450px">
+    <div class="video-container" style="display:flex; justify-content:center; align-items:center;margin-top:10px;position:relative">
+     <video controls style="width:600px;height:450px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 10px;">
            <source src="https://storage.googleapis.com/dss-bucket/videos/{{ video_arg }}" type="video/mp4">
       </video>
     </div>
