@@ -2,14 +2,17 @@ from flask import Flask
 from flask import render_template
 from flask import jsonify
 from flask import request
-from google_services import upload_blob
+from google_services import upload_blob, get_blobs
 import sqlite3
 import os
 import subprocess
 import time
+import re
 
 app = Flask(__name__)
 os.environ.setdefault("GCLOUD_PROJECT", "linen-server-399214")
+if "dss-videos" not in os.listdir("/tmp"):
+  os.mkdir("/tmp/dss-videos")
 
 
 @app.route("/")
@@ -18,12 +21,16 @@ def index():
 
 @app.route("/video-index", methods=["GET"])
 def video_index():
-  conn = sqlite3.connect("video_index.db")
-  c = conn.cursor()
-  c.execute("SELECT * FROM videos")
-  rows = c.fetchall()
-  conn.close()
-  return jsonify(rows)
+  # conn = sqlite3.connect("video_index.db")
+  # c = conn.cursor()
+  # c.execute("SELECT * FROM videos")
+  # rows = c.fetchall()
+  # conn.close()
+  items = []
+  for name in get_blobs():
+    items.append(name)
+  return jsonify({"items": items}), 200
+
   
 @app.route("/video-upload", methods=["POST"])
 def video_upload():
@@ -32,7 +39,10 @@ def video_upload():
   
   assert video.filename, "No selected file"
   video_name = video.filename.split(".")[0]
-  
+
+  print(request.text)
+
+
   video_path = f"/tmp/dss-videos/{video.filename}"
   print(video_path)
   with open(video_path, "wb") as f:
@@ -50,11 +60,12 @@ def video_upload():
   print("Public url:", public_url)
   print("I just created ", video_name, newpath)
   
-  conn = sqlite3.connect("video_index.db")
-  c = conn.cursor()
-  c.execute("INSERT INTO videos (name, url, length, timestamp) VALUES (?, ?, ?, ?)", (video_name, public_url, 60, int(time.time())))
-  conn.commit()
-  conn.close()
+  # conn = sqlite3.connect("video_index.db")
+  # c = conn.cursor()
+  # timestamp = int(re.search(r"\d+", video_name).group(0))
+  # c.execute("INSERT INTO videos (name, url, length, timestamp) VALUES (?, ?, ?, ?)", (video_name, public_url, 60, timestamp))
+  # conn.commit()
+  # conn.close()
   
   return "File upload successful", 200
   

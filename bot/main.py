@@ -16,7 +16,7 @@ async def test(ctx):
 async def recordings(ctx):
   url = "https://discord-security-system.subwayman.repl.co/video-index"
   req = requests.get(url)
-  print(req.text)
-  print(eval(req.text))
+  items = eval(req.text)
+  print(items)
   await ctx.respond("check repl.")
 bot.run(token)

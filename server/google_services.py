@@ -29,7 +29,13 @@ def upload_blob(video_file, video_name, destination_blob_name):
     blob.upload_from_file(video_file, if_generation_match=generation_match_precondition)
   
     return f"https://storage.googleapis.com/dss-bucket/videos/{video_name}"
-  
+
+def get_blobs():
+  storage_client = storage.Client()
+  bucket = storage_client.bucket("dss-bucket")
+  blobs = bucket.list_blobs(max_results=10)
+  for blob in blobs:
+    yield blob.name
 
 if __name__ == "__main__":
     upload_blob(*sys.argv[1:])
