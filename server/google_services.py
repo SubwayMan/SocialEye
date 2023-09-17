@@ -15,6 +15,9 @@ def upload_blob(video_file, video_name, destination_blob_name):
     bucket = storage_client.bucket("dss-bucket")
     blob = bucket.blob(destination_blob_name)
 
+    if __name__ == "__main__":
+      video_file = open(video_file, "rb")
+
     # Optional: set a generation-match precondition to avoid potential race conditions
     # and data corruptions. The request to upload is aborted if the object's
     # generation number does not match your precondition. For a destination

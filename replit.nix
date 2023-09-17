@@ -1,5 +1,7 @@
 { pkgs }: {
   deps = [
+    pkgs.tree
+    pkgs.ffmpeg.bin
     pkgs.sudo
     pkgs.google-cloud-sdk
     pkgs.python310Full

@@ -4,9 +4,13 @@ from flask import jsonify
 from flask import request
 from google_services import upload_blob
 import sqlite3
+import os
+import subprocess
 import time
 
 app = Flask(__name__)
+os.environ.setdefault("GCLOUD_PROJECT", "linen-server-399214")
+
 
 @app.route("/")
 def index():
@@ -27,10 +31,24 @@ def video_upload():
   video = request.files["video"]
   
   assert video.filename, "No selected file"
-  video_name = video.filename
-  video_path = f"videos/{video_name}"
+  video_name = video.filename.split(".")[0]
+  
+  video_path = f"/tmp/dss-videos/{video.filename}"
+  print(video_path)
+  with open(video_path, "wb") as f:
+    f.write(video.read())
 
-  public_url = upload_blob(video, video_name, video_path)
+  print(os.listdir("/tmp/dss-videos"))
+
+  newpath = f"/tmp/dss-videos/{video_name}.mp4"
+  subprocess.run(["ffmpeg", "-framerate", "24", "-i", video_path, "-c", "copy", newpath])
+  
+  new_video = open(newpath, "rb")
+  newpath = os.path.join("videos", newpath.split("/")[-1])
+
+  public_url = upload_blob(new_video, video_name, newpath)
+  print("Public url:", public_url)
+  print("I just created ", video_name, newpath)
   
   conn = sqlite3.connect("video_index.db")
   c = conn.cursor()
