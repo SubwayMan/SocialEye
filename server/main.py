@@ -19,6 +19,10 @@ if "dss-videos" not in os.listdir("/tmp"):
 def index():
   return render_template('index.html')
 
+@app.get('/video/<video_arg>')
+def single_converter(video_arg):
+    return "here is the + str(video_arg)"
+
 @app.route("/video-index", methods=["GET"])
 def video_index():
   # conn = sqlite3.connect("video_index.db")
